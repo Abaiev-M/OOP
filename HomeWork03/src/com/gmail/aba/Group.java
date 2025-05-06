@@ -4,10 +4,10 @@ import com.gmail.aba.Exception.GroupOverflowException;
 import com.gmail.aba.Exception.StudentNotFoundException;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Group {
     private String groupName;
-
     private final Student[] students = new Student[10];
 
     public Group(String groupName) {
@@ -43,6 +43,14 @@ public class Group {
                 return true;
             }
         } return false;
+    }
+
+    public void sortStudentsByLastName(Student[] students) {
+        Arrays.sort(students, Comparator.nullsLast(new StudentLastNameComparator()));
+    }
+
+    public Student[] getStudents() {
+        return students;
     }
 
     public String getGroupName() {

@@ -13,6 +13,23 @@ public class Student extends Human {
     public Student() {
     }
 
+    public String toCSV() {
+        return getName() + "," + getLastName() + "," + getGender() + "," + id + "," + groupName;
+    }
+
+    public static Student fromCSV(String line) {
+        String[] parts = line.split(",");
+        if (parts.length != 5) return null;
+
+        String name = parts[0];
+        String lastName = parts[1];
+        Gender gender = Gender.valueOf(parts[2]);
+        int id = Integer.parseInt(parts[3]);
+        String groupName = parts[4];
+
+        return new Student(name, lastName, gender, id, groupName);
+    }
+
     public int getId() {
         return id;
     }

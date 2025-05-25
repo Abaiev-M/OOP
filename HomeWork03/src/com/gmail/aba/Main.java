@@ -26,6 +26,7 @@ public class Main {
         Student st3 = new Student("Sergey", "Ab", Gender.MALE, 3, "k 2-2");
         Student st4 = new Student("Anton", "By", Gender.MALE, 4, "k 1-3");
         Student st5 = new Student("Alina", "Sh", Gender.FEMALE, 5, "k 3-2");
+        Student st6 = new Student("Alina", "Sh", Gender.FEMALE, 5, "k 3-2");
 
         try {
             group.addStudent(st1);
@@ -33,6 +34,7 @@ public class Main {
             group.addStudent(st3);
             group.addStudent(st4);
             group.addStudent(st5);
+            group.addStudent(st6);
 
         } catch (GroupOverflowException e) {
             throw new RuntimeException(e);
@@ -52,12 +54,19 @@ public class Main {
 
         group.showStudents();
 
-
         System.out.println("------------------------");
         groupFileStorage.saveGroupToCSV(group);
         File foundFile = groupFileStorage.findFileByGroupName("group K", new File("."));
         Group loadedGroup = groupFileStorage.loadGroupFromCSV(foundFile);
         loadedGroup.showStudents();
+
+        System.out.println("------------------------");
+        if (group.hasDuplicateStudents()) {
+            System.out.println("There are duplicate students in the group.");
+        } else {
+            System.out.println("No duplicates");
+        }
+
 
     }
 }

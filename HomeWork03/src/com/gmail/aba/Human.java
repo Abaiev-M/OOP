@@ -1,5 +1,7 @@
 package com.gmail.aba;
 
+import java.util.Objects;
+
 public class Human {
     private String name;
     private String lastName;
@@ -36,6 +38,18 @@ public class Human {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Human human = (Human) o;
+        return Objects.equals(name, human.name) && Objects.equals(lastName, human.lastName) && gender == human.gender;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, lastName, gender);
     }
 
     @Override

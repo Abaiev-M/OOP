@@ -5,6 +5,7 @@ import com.gmail.aba.Exception.StudentNotFoundException;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Group {
     private String groupName;
@@ -70,6 +71,33 @@ public class Group {
                 count++;
             }
         }
+    }
+
+    public boolean hasDuplicateStudents() {
+        for (int i = 0; i < students.length; i++) {
+            Student s1 = students[i];
+            if (s1 == null) continue;
+            for (int j = i + 1; j < students.length; j++) {
+                Student s2 = students[j];
+                if (s2 == null) continue;
+                if (s1.equals(s2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return Objects.equals(groupName, group.groupName) && Objects.deepEquals(students, group.students);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(groupName, Arrays.hashCode(students));
     }
 
     @Override

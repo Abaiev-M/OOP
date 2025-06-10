@@ -3,13 +3,11 @@ package com.gmail.aba;
 import com.gmail.aba.Exception.GroupOverflowException;
 import com.gmail.aba.Exception.StudentNotFoundException;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
 
 public class Group {
     private String groupName;
-    private final Student[] students = new Student[10];
+    private final List<Student> students = new ArrayList<>();
 
     public Group(String groupName) {
         this.groupName = groupName;
@@ -21,36 +19,38 @@ public class Group {
     public void addStudent(Student student) throws GroupOverflowException {
         if (student == null) throw new RuntimeException("Student is null");
 
-        for (int i = 0; i < students.length; i++) {
-            if (students[i] == null) {
-                students[i] = student;
-                return;
-            }
-        } throw new GroupOverflowException("Group is full");
+        if (students.size() >= 10) {
+            throw new GroupOverflowException("Group is full");
+        }
+        students.add(student);
     }
 
     public Student searchStudentByLastName(String lastName) throws StudentNotFoundException {
-        for (int i = 0; i < students.length; i++) {
-            if ( students[i] != null && students[i].getLastName().equals(lastName)) {
-                return students[i];
+        for (Student st : students) {
+            if (st.getLastName().equals(lastName)) {
+                return st;
             }
         } throw new StudentNotFoundException("Student not found");
     }
 
     public boolean removeStudentByID(int id) {
-        for (int i = 0; i < students.length; i++) {
-            if (students[i] != null && students[i].getId() == id) {
-                students[i] = null;
+        Iterator<Student> iterator = students.iterator();
+        while (iterator.hasNext()) {
+            Student student = iterator.next();
+            if (student.getId() == id) {
+                iterator.remove();
+                System.out.println("student is removed");
                 return true;
             }
-        } return false;
+        }
+        return false;
     }
 
-    public void sortStudentsByLastName(Student[] students) {
-        Arrays.sort(students, Comparator.nullsLast(new StudentLastNameComparator()));
+    public void sortStudentsByLastName() {
+        students.sort(new StudentLastNameComparator());
     }
 
-    public Student[] getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
@@ -65,21 +65,17 @@ public class Group {
 
     public void showStudents() {
         int count = 1;
-        for (int i = 0; i < students.length; i++) {
-            if (students[i] != null) {
-                System.out.println(count + " ) " + students[i] + " " + groupName);
-                count++;
-            }
+        for (Student st : students) {
+            System.out.println(count + " ) " + st + " " + groupName);
+            count++;
         }
     }
 
     public boolean hasDuplicateStudents() {
-        for (int i = 0; i < students.length; i++) {
-            Student s1 = students[i];
-            if (s1 == null) continue;
-            for (int j = i + 1; j < students.length; j++) {
-                Student s2 = students[j];
-                if (s2 == null) continue;
+        for (int i = 0; i < students.size(); i++) {
+            Student s1 = students.get(i);
+            for (int j = i + 1; j < students.size(); j++) {
+                Student s2 = students.get(j);
                 if (s1.equals(s2)) {
                     return true;
                 }
@@ -92,19 +88,19 @@ public class Group {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return Objects.equals(groupName, group.groupName) && Objects.deepEquals(students, group.students);
+        return Objects.equals(groupName, group.groupName) && Objects.equals(students, group.students);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(groupName, Arrays.hashCode(students));
+        return Objects.hash(groupName, students);
     }
 
     @Override
     public String toString() {
         return "Group{" +
                 "groupName='" + groupName + '\'' +
-                ", studens=" + Arrays.toString(students) +
+                ", studens=" + students +
                 '}';
     }
 }

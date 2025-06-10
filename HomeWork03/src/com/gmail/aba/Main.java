@@ -47,9 +47,11 @@ public class Main {
         }
 
         System.out.println(group.removeStudentByID(1));
+
         System.out.println(group.removeStudentByID(1));
+
         group.showStudents();
-        group.sortStudentsByLastName(group.getStudents());
+        group.sortStudentsByLastName();
         System.out.println("--------------------------");
 
         group.showStudents();
